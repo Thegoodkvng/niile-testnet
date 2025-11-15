@@ -1,15 +1,34 @@
-import { api } from "@/lib/api";
-import { Agent } from "@/types";
-import AgentCard from "@/components/AgentCard";
+// E:\...\frontend\src\app\agents\page.tsx
+import { getAgents } from "@/lib/api";
+import { AgentCard } from "@/components/AgentCard";
+
+export const revalidate = 60;
 
 export default async function AgentsPage() {
-  const agents = await api<Agent[]>("/agents/");
+  const data = await getAgents();
+  const agents = data.results;
+
   return (
-    <main className="max-w-5xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6">Agents</h1>
-      <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {agents.map(a => <AgentCard key={a.slug} a={a} />)}
-      </ul>
-    </main>
+    <div className="container py-8 space-y-6">
+      <div>
+        <h1 className="text-xl sm:text-2xl font-semibold text-slate-900">
+          Our Agents
+        </h1>
+        <p className="text-xs sm:text-sm text-slate-500 mt-1">
+          Browse our verified agents and contact them about available
+          properties.
+        </p>
+      </div>
+
+      {agents.length === 0 ? (
+        <p className="text-sm text-slate-500">No agents available yet.</p>
+      ) : (
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {agents.map((agent) => (
+            <AgentCard key={agent.id} agent={agent} />
+          ))}
+        </div>
+      )}
+    </div>
   );
 }

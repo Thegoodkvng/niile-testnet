@@ -1,15 +1,15 @@
-from rest_framework import serializers
-from .models import Property, PropertyImage
+# backend/properties/serializers.py
 
-class PropertyImageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = PropertyImage
-        fields = ["id","image","alt"]
+from rest_framework import serializers
+from .models import Property
+
 
 class PropertySerializer(serializers.ModelSerializer):
-    images = PropertyImageSerializer(many=True, read_only=True)
+    """
+    Minimal serializer that exposes all fields on the Property model,
+    including created_by.
+    """
 
     class Meta:
         model = Property
-        fields = ["id","title","slug","description","price","currency","address","city","state","country",
-                  "bedrooms","bathrooms","area_sqft","is_published","created_at","updated_at","images"]
+        fields = "__all__"

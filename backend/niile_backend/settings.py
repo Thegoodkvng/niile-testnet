@@ -8,6 +8,22 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Load environment variables from .env file
+load_dotenv(os.path.join(BASE_DIR, ".env"))
+
+from pathlib import Path
+import os
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
+STATIC_URL = "/static/"
+
+
 # ------------------------------------------------------------
 # Base paths and environment variables
 # ------------------------------------------------------------
@@ -34,7 +50,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
 
     # Third-party apps
-    "rest_framework",
+    "rest_framework",            # ✅ only once
+    "rest_framework.authtoken",
     "corsheaders",
 
     # Local apps
@@ -58,6 +75,16 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "niile_backend.urls"
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+    ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.AllowAny",
+    ],
+}
 
 TEMPLATES = [
     {
@@ -139,4 +166,5 @@ if not CORS_ALLOWED_ORIGINS:
 REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
     "DEFAULT_PARSER_CLASSES": ["rest_framework.parsers.JSONParser"],
+    
 }
